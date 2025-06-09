@@ -1,0 +1,123 @@
+{
+  "timestamp": "2025-06-09T20:09:31.684Z",
+  "strategies": {
+    "useRE2": {
+      "name": "Use RE2 Engine",
+      "description": "Replace JavaScript regex engine with Google's RE2 for linear time complexity",
+      "example": "\n// Before (vulnerable)\nconst regex = /^(a+)+$/;\nconst result = regex.test(input);\n\n// After (safe with RE2)\nconst RE2 = require('re2');\nconst regex = new RE2('^(a+)+$');\nconst result = regex.test(input);\n",
+      "pros": [
+        "Guaranteed linear time",
+        "Drop-in replacement",
+        "No pattern changes needed"
+      ],
+      "cons": [
+        "Additional dependency",
+        "Some JS regex features not supported",
+        "Performance overhead for simple patterns"
+      ]
+    },
+    "rewritePattern": {
+      "name": "Rewrite Vulnerable Patterns",
+      "description": "Modify regex patterns to eliminate nested quantifiers and dangerous alternation",
+      "examples": [
+        {
+          "vulnerable": "^(a+)+$",
+          "safe": "^a+$",
+          "explanation": "Remove nested quantifiers - single quantifier achieves same result"
+        },
+        {
+          "vulnerable": "^(a|a)*$",
+          "safe": "^a*$",
+          "explanation": "Eliminate redundant alternation branches"
+        },
+        {
+          "vulnerable": "(.*a){20}",
+          "safe": "(?:[^a]*a){20}",
+          "explanation": "Use possessive quantifiers or character classes to prevent backtracking"
+        }
+      ]
+    },
+    "inputValidation": {
+      "name": "Input Validation and Limits",
+      "description": "Validate and limit input size before regex processing",
+      "example": "\n// Before (vulnerable to large inputs)\nfunction validateEmail(email) {\n  const regex = /^([a-zA-Z0-9])(([\\.\\-])?([a-zA-Z0-9]+))*([a-zA-Z0-9])@([a-zA-Z0-9])(([\\.\\-])?([a-zA-Z0-9]+))*([a-zA-Z0-9])\\.[a-zA-Z]{2,4}$/;\n  return regex.test(email);\n}\n\n// After (safe with input limits)\nfunction validateEmail(email) {\n  // Limit input size\n  if (!email || email.length > 254) {\n    return false;\n  }\n  \n  // Use simpler, safer pattern\n  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;\n  return regex.test(email);\n}\n",
+      "pros": [
+        "Simple to implement",
+        "Prevents resource exhaustion",
+        "Works with existing patterns"
+      ],
+      "cons": [
+        "May reject valid inputs",
+        "Requires careful limit selection",
+        "Not a complete solution"
+      ]
+    },
+    "timeoutMechanism": {
+      "name": "Timeout Mechanisms",
+      "description": "Implement timeouts to prevent long-running regex operations",
+      "example": "\n// Timeout wrapper for regex operations\nfunction safeRegexTest(pattern, input, timeoutMs = 1000) {\n  return new Promise((resolve, reject) => {\n    const timeout = setTimeout(() => {\n      reject(new Error('Regex timeout - possible ReDoS'));\n    }, timeoutMs);\n    \n    try {\n      const regex = new RegExp(pattern);\n      const result = regex.test(input);\n      clearTimeout(timeout);\n      resolve(result);\n    } catch (error) {\n      clearTimeout(timeout);\n      reject(error);\n    }\n  });\n}\n\n// Usage\ntry {\n  const result = await safeRegexTest('^(a+)+$', 'aaaaaaaaax', 1000);\n  console.log('Result:', result);\n} catch (error) {\n  console.log('Regex operation failed or timed out:', error.message);\n}\n",
+      "pros": [
+        "Prevents hanging",
+        "Works with any pattern",
+        "Configurable limits"
+      ],
+      "cons": [
+        "Async complexity",
+        "May interrupt valid operations",
+        "Resource still consumed during timeout period"
+      ]
+    }
+  },
+  "examples": [
+    {
+      "project": "validator.js",
+      "vulnerableCount": 4,
+      "mitigationApproach": "Pattern rewriting + input validation",
+      "patterns": [
+        {
+          "pattern": "^5[1-5][0-9]{2}|(222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$",
+          "file": "isCreditCard.js",
+          "recommendedFix": "See mitigation examples"
+        },
+        {
+          "pattern": "^([a-z\\u00A1-\\u00A8\\u00AA-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]{2,}|xn[a-z0-9-]{2,})$",
+          "file": "isFQDN.js",
+          "recommendedFix": "See mitigation examples"
+        },
+        {
+          "pattern": "^hsla?\\(((\\+|\\-)?([0-9]+(\\.[0-9]+)?(e(\\+|\\-)?[0-9]+)?|\\.[0-9]+(e(\\+|\\-)?[0-9]+)?))(deg|grad|rad|turn",
+          "file": "isHSL.js",
+          "recommendedFix": "See mitigation examples"
+        }
+      ]
+    },
+    {
+      "project": "moment.js",
+      "vulnerableCount": 5,
+      "mitigationApproach": "Pattern rewriting + input validation",
+      "patterns": [
+        {
+          "pattern": "^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\\s)?(\\d{1,2})\\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\",
+          "file": "from-string.js",
+          "recommendedFix": "See mitigation examples"
+        },
+        {
+          "pattern": "\\([^()]*\\)|[\\n\\t]",
+          "file": "from-string.js",
+          "recommendedFix": "See mitigation examples"
+        },
+        {
+          "pattern": "\\s\\s*$",
+          "file": "from-string.js",
+          "recommendedFix": "See mitigation examples"
+        }
+      ]
+    },
+    {
+      "project": "chalk",
+      "vulnerableCount": 0,
+      "mitigationApproach": "No mitigation needed",
+      "patterns": []
+    }
+  ]
+}

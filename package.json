@@ -1,0 +1,26 @@
+{
+  "name": "redos-detection-project",
+  "version": "1.0.0",
+  "description": "ReDoS Detection and Mitigation Project - Academic research on Regular Expression Denial of Service vulnerabilities",
+  "main": "src/quick-analysis.js",
+  "scripts": {
+    "install-deps": "cd src/tool-evaluation && npm install",
+    "analyze": "node src/quick-analysis.js",
+    "benchmark": "node src/performance-benchmark.js",
+    "mitigation": "node src/mitigation-examples.js",
+    "evaluate-tools": "node src/tool-evaluation/evaluate-tools.js",
+    "pipeline": "npm run evaluate-tools && npm run analyze && npm run benchmark && npm run mitigation"
+  },
+  "dependencies": {
+    "safe-regex": "^1.1.0",
+    "redos-detector": "^6.1.2",
+    "re2": "^1.20.9"
+  },
+  "keywords": ["redos", "regex", "security", "static-analysis", "academic"],
+  "author": "Group 43",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "Academic project for Language-Based Security course"
+  }
+} 

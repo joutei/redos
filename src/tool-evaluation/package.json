@@ -1,0 +1,21 @@
+{
+  "name": "redos-detection-evaluation",
+  "version": "1.0.0",
+  "description": "Evaluation of ReDoS detection tools for academic project",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test-tools.js",
+    "evaluate": "node evaluate-tools.js"
+  },
+  "dependencies": {
+    "safe-regex": "^1.1.0",
+    "redos-detector": "^6.1.2",
+    "re2": "^1.20.9"
+  },
+  "devDependencies": {
+    "benchmark": "^2.1.4"
+  },
+  "keywords": ["redos", "regex", "security", "static-analysis"],
+  "author": "Group 43",
+  "license": "MIT"
+} 
