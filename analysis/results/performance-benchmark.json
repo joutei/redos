@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-09T20:09:31.543Z",
+  "timestamp": "2025-06-09T20:56:17.953Z",
   "summary": "Performance benchmark of vulnerable regex patterns",
   "methodology": "Tested with increasing input sizes to demonstrate exponential growth",
   "results": {
@@ -10,19 +10,19 @@
         "results": [
           {
             "inputLength": 22,
-            "duration": 0.72787,
+            "duration": 0.481889,
             "result": true,
             "timeout": false
           },
           {
             "inputLength": 52,
-            "duration": 0.30184,
+            "duration": 0.285742,
             "result": true,
             "timeout": false
           },
           {
             "inputLength": 102,
-            "duration": 0.12507,
+            "duration": 0.07614,
             "result": true,
             "timeout": false
           }
@@ -34,19 +34,19 @@
         "results": [
           {
             "inputLength": 21,
-            "duration": 1.65264,
+            "duration": 1.30739,
             "result": true,
             "timeout": false
           },
           {
             "inputLength": 51,
-            "duration": 1.25543,
+            "duration": 0.960934,
             "result": true,
             "timeout": false
           },
           {
             "inputLength": 101,
-            "duration": 0.10296,
+            "duration": 0.07603,
             "result": true,
             "timeout": false
           }
@@ -58,19 +58,19 @@
         "results": [
           {
             "inputLength": 45,
-            "duration": 1.39755,
+            "duration": 1.276432,
             "result": false,
             "timeout": false
           },
           {
             "inputLength": 105,
-            "duration": 1.66067,
+            "duration": 1.226984,
             "result": false,
             "timeout": false
           },
           {
             "inputLength": 205,
-            "duration": 0.42075,
+            "duration": 0.354443,
             "result": false,
             "timeout": false
           }
@@ -84,19 +84,19 @@
         "results": [
           {
             "inputLength": 29,
-            "duration": 1.4905,
+            "duration": 1.600243,
             "result": false,
             "timeout": false
           },
           {
             "inputLength": 59,
-            "duration": 0.92796,
+            "duration": 0.544792,
             "result": false,
             "timeout": false
           },
           {
             "inputLength": 109,
-            "duration": 0.06281,
+            "duration": 0.054479,
             "result": false,
             "timeout": false
           }
@@ -108,19 +108,19 @@
         "results": [
           {
             "inputLength": 21,
-            "duration": 0.17105,
+            "duration": 0.157311,
             "result": false,
             "timeout": false
           },
           {
             "inputLength": 51,
-            "duration": 0.13838,
+            "duration": 0.126134,
             "result": false,
             "timeout": false
           },
           {
             "inputLength": 101,
-            "duration": 0.03905,
+            "duration": 0.037741,
             "result": false,
             "timeout": false
           }
@@ -132,19 +132,19 @@
         "results": [
           {
             "inputLength": 21,
-            "duration": 0.12463,
+            "duration": 0.118257,
             "result": false,
             "timeout": false
           },
           {
             "inputLength": 51,
-            "duration": 0.17985,
+            "duration": 0.21201,
             "result": false,
             "timeout": false
           },
           {
             "inputLength": 101,
-            "duration": 0.59202,
+            "duration": 0.10316,
             "result": false,
             "timeout": false
           }

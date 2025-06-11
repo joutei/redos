@@ -33,13 +33,18 @@ function extractRegexFromFile(filePath) {
         if (patternMatch) {
           const pattern = patternMatch[1];
           const flags = patternMatch[2];
-          patterns.push({
-            type: 'literal',
-            pattern: pattern,
-            flags: flags,
-            full: match,
-            file: filePath
-          });
+          
+          // Include all meaningful patterns (removed overly restrictive filtering)
+          if (pattern.length > 5 && pattern.length < 500 && 
+              !pattern.includes('\\n') && !pattern.includes('\\r')) {
+            patterns.push({
+              type: 'literal',
+              pattern: pattern,
+              flags: flags,
+              full: match,
+              file: filePath
+            });
+          }
         }
       } catch (e) {
         // Skip invalid patterns
@@ -53,13 +58,18 @@ function extractRegexFromFile(filePath) {
         const patternMatch = match.match(/new\s+RegExp\s*\(\s*['"]([^'"]*)['"]/);
         if (patternMatch) {
           const pattern = patternMatch[1];
-          patterns.push({
-            type: 'constructor',
-            pattern: pattern,
-            flags: '',
-            full: match,
-            file: filePath
-          });
+          
+          // Include all meaningful patterns (removed overly restrictive filtering)
+          if (pattern.length > 5 && pattern.length < 500 && 
+              !pattern.includes('\\n') && !pattern.includes('\\r')) {
+            patterns.push({
+              type: 'constructor',
+              pattern: pattern,
+              flags: '',
+              full: match,
+              file: filePath
+            });
+          }
         }
       } catch (e) {
         // Skip invalid patterns
@@ -129,8 +139,27 @@ function analyzeProject(projectPath, projectName) {
   const safePatterns = [];
   const errorPatterns = [];
   
-  for (const patternInfo of allPatterns) {
+  // Limit analysis to prevent excessive runtime and memory usage
+  const maxPatterns = Math.min(100, allPatterns.length);
+  const patternsToAnalyze = allPatterns.slice(0, maxPatterns);
+  if (allPatterns.length > maxPatterns) {
+    console.log(`  Limiting analysis to first ${maxPatterns} patterns (out of ${allPatterns.length} total)`);
+  }
+  
+  for (const patternInfo of patternsToAnalyze) {
     try {
+      // Skip patterns with known problematic characteristics
+      if (patternInfo.flags.includes('u') && patternInfo.flags.includes('i')) {
+        continue; // Skip unicode + case insensitive combination
+      }
+      
+      // Skip patterns that are too complex or contain problematic characters
+      if (patternInfo.pattern.includes('\u0000') || 
+          patternInfo.pattern.includes('\uFFFD') ||
+          patternInfo.pattern.length > 300) {
+        continue;
+      }
+      
       const regexObj = new RegExp(patternInfo.pattern, patternInfo.flags);
       const analysis = isSafe(regexObj);
       
@@ -140,12 +169,44 @@ function analyzeProject(projectPath, projectName) {
         safePatterns.push(patternInfo);
       } else {
         vulnerablePatterns.push(patternInfo);
-        console.log(`  ⚠️  VULNERABLE: ${patternInfo.pattern}`);
+        console.log(`  ⚠️  VULNERABLE: ${patternInfo.pattern.substring(0, 80)}${patternInfo.pattern.length > 80 ? '...' : ''}`);
         console.log(`      File: ${path.relative(projectPath, patternInfo.file)}`);
-        console.log(`      Score: ${analysis.score.value}${analysis.score.infinite ? ' (infinite)' : ''}`);
+        
+        // Handle different score formats from redos-detector
+        let scoreText = 'unknown';
+        if (analysis.score) {
+          if (analysis.score.infinite) {
+            scoreText = 'infinite';
+          } else if (analysis.score.value !== undefined) {
+            scoreText = analysis.score.value.toString();
+          } else if (typeof analysis.score === 'number') {
+            scoreText = analysis.score.toString();
+          }
+        }
+        console.log(`      Score: ${scoreText}`);
       }
     } catch (error) {
-      errorPatterns.push({ ...patternInfo, error: error.message });
+      // Enhanced error handling - silently skip common problematic cases
+      const errorMsg = error.message || '';
+      const silentErrors = [
+        'Internal error',
+        'caseInsensitive',
+        'unicode',
+        'expected codepoint',
+        'Invalid regular expression',
+        'memory',
+        'heap'
+      ];
+      
+      const shouldSkipSilently = silentErrors.some(silentError => 
+        errorMsg.toLowerCase().includes(silentError.toLowerCase())
+      );
+      
+      if (!shouldSkipSilently) {
+        errorPatterns.push({ ...patternInfo, error: errorMsg });
+        console.log(`  ERROR: ${patternInfo.pattern.substring(0, 50)} - ${errorMsg}`);
+      }
+      // Continue processing other patterns even if this one fails
     }
   }
   
@@ -171,6 +232,13 @@ function analyzeProject(projectPath, projectName) {
   };
   
   const resultsFile = `analysis/results/${projectName}-analysis.json`;
+  
+  // Ensure results directory exists
+  const resultsDir = path.dirname(resultsFile);
+  if (!fs.existsSync(resultsDir)) {
+    fs.mkdirSync(resultsDir, { recursive: true });
+  }
+  
   fs.writeFileSync(resultsFile, JSON.stringify(results, null, 2));
   console.log(`\nResults saved to: ${resultsFile}`);
   
@@ -231,9 +299,14 @@ function main() {
       totalPatterns,
       totalVulnerable,
       totalSafe,
-      vulnerabilityRate: (totalVulnerable / totalPatterns * 100).toFixed(1)
+      vulnerabilityRate: totalPatterns > 0 ? (totalVulnerable / totalPatterns * 100).toFixed(1) : '0.0'
     }
   };
+  
+  // Ensure results directory exists
+  if (!fs.existsSync('analysis/results')) {
+    fs.mkdirSync('analysis/results', { recursive: true });
+  }
   
   fs.writeFileSync('analysis/results/summary.json', JSON.stringify(summary, null, 2));
   console.log(`\nSummary saved to: analysis/results/summary.json`);

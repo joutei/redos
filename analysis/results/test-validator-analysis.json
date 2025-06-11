@@ -1,0 +1,195 @@
+{
+  "project": "test-validator",
+  "timestamp": "2025-06-11T08:17:39.802Z",
+  "summary": {
+    "totalFiles": 113,
+    "totalPatterns": 839,
+    "safePatterns": 97,
+    "vulnerablePatterns": 0,
+    "errorPatterns": 0
+  },
+  "vulnerablePatterns": [],
+  "safePatterns": [
+    {
+      "type": "literal",
+      "pattern": "^[A-Z]+$",
+      "flags": "i",
+      "full": "/^[A-Z]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[A-Z]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    },
+    {
+      "type": "literal",
+      "pattern": "^[A-VXYZÇƏĞİıÖŞÜ]+$",
+      "flags": "i",
+      "full": "/^[A-VXYZÇƏĞİıÖŞÜ]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[A-VXYZÇƏĞİıÖŞÜ]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    },
+    {
+      "type": "literal",
+      "pattern": "^[А-Я]+$",
+      "flags": "i",
+      "full": "/^[А-Я]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[А-Я]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    },
+    {
+      "type": "literal",
+      "pattern": "^[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]+$",
+      "flags": "i",
+      "full": "/^[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    },
+    {
+      "type": "literal",
+      "pattern": "^[A-ZÆØÅ]+$",
+      "flags": "i",
+      "full": "/^[A-ZÆØÅ]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[A-ZÆØÅ]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    },
+    {
+      "type": "literal",
+      "pattern": "^[A-ZÄÖÜß]+$",
+      "flags": "i",
+      "full": "/^[A-ZÄÖÜß]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[A-ZÄÖÜß]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    },
+    {
+      "type": "literal",
+      "pattern": "^[Α-ώ]+$",
+      "flags": "i",
+      "full": "/^[Α-ώ]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[Α-ώ]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    },
+    {
+      "type": "literal",
+      "pattern": "^[A-ZÁÉÍÑÓÚÜ]+$",
+      "flags": "i",
+      "full": "/^[A-ZÁÉÍÑÓÚÜ]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[A-ZÁÉÍÑÓÚÜ]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    },
+    {
+      "type": "literal",
+      "pattern": "^[ابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی]+$",
+      "flags": "i",
+      "full": "/^[ابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[ابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    },
+    {
+      "type": "literal",
+      "pattern": "^[A-ZÅÄÖ]+$",
+      "flags": "i",
+      "full": "/^[A-ZÅÄÖ]+$/i",
+      "file": "analysis/projects/validator.js/src/lib/alpha.js",
+      "analysis": {
+        "error": null,
+        "safe": true,
+        "pattern": "^[A-ZÅÄÖ]+$",
+        "patternDowngraded": false,
+        "score": {
+          "infinite": false,
+          "value": 1
+        },
+        "trails": []
+      }
+    }
+  ],
+  "errorPatterns": []
+}
